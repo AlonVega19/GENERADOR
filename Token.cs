@@ -1,24 +1,34 @@
 //Alondra Yocelin Osornio Vega
-using System;
 namespace GENERADOR
 {
-    public class Token{
+    public class Token
+    {
         private string Contenido = "";
-        private tipos Clasificacion;
-        public enum tipos{
-            identificador
+        private Tipos Clasificacion;
+        public enum Tipos
+        {
+            Produce, SNT, ST, FinProduccion
         }
-        public void setContenido(string Contenido){
-            this.Contenido = Contenido;
+
+        public void setContenido(string contenido)
+        {
+            this.Contenido = contenido;
         }
-        public void setClasificacion(tipos Clasificacion){
-            this.Clasificacion = Clasificacion;
+
+        public void setClasificacion(Tipos clasificacion)
+        {
+            this.Clasificacion = clasificacion;
         }
-        public string getContenido(){
+
+        public string getContenido()
+        {
             return this.Contenido;
         }
-        public tipos getClasificacion(){
+
+        public Tipos getClasificacion()
+        {
             return this.Clasificacion;
         }
+
     }
 }
