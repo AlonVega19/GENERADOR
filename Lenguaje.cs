@@ -8,10 +8,12 @@ using System.Collections.Generic;
 //Requerimiento 3: La primera produccion es publica y el resto privadas
 //Requerimiento 4: El constructor Lexico() parametrizado debe validar que la extension del archivo a compilar sea .gen y si no es .gen debe lanzar una excepcion 
 //Requerimiento 5: Resolver la ambigüedad de ST y SNT 
+//Requerimiento 6: Recorrer linea por linea el archivo .gram 
 namespace GENERADOR
 {
     public class Lenguaje : Sintaxis, IDisposable
     {
+         List<string> listaSNT;
         public Lenguaje(string nombre) : base(nombre)
         {
             
@@ -24,6 +26,15 @@ namespace GENERADOR
         {
             cerrar();
         }
+        private bool esSNT(string contenido)
+        {
+            return true;
+            //return listaSNT.Contains(contenido);
+        }
+        /*private void agregaeSNT(string contenido)
+        {
+            listaSNT.Add(contenido);
+        }*/
         private void Programa(string produccionPrincipal)
         {
             programa.WriteLine("using System;");
@@ -65,8 +76,7 @@ namespace GENERADOR
         {
             match("Gramatica");
             match(":");
-            getContenido();
-            match(Tipos.SNT);
+            match(Tipos.ST);
             match(Tipos.FinProduccion);
         }
         private void cabeceraLenguaje()
@@ -92,7 +102,7 @@ namespace GENERADOR
         {
             lenguaje.WriteLine("\t\tprivate void "+getContenido()+"()");
             lenguaje.WriteLine("\t\t{");
-            match(Tipos.SNT);
+            match(Tipos.ST);
             match(Tipos.Produce);
             simbolos();
             match(Tipos.FinProduccion);
@@ -104,27 +114,36 @@ namespace GENERADOR
         }
         private void simbolos()
         {
-            if(esTipo(getContenido()))
+            if (getContenido()== "(")
+            {
+                match("(");
+                lenguaje.WriteLine("\t\tif ()");
+                lenguaje.WriteLine("\t\t{");
+                simbolos();
+                match(")");
+                lenguaje.WriteLine("\t\t}");
+            }
+            else if(esTipo(getContenido()))
             {
                 lenguaje.WriteLine("\t\t\tmatch(Tipos." + getContenido() + ");");
                 match(Tipos.SNT);
+            }
+            else if (esSNT(getContenido()))
+            {
+                lenguaje.WriteLine("\t\t\t" + getContenido() + "();");
+                match(Tipos.ST);
             }
             else if(getClasificacion() == Tipos.ST)
             {
                 lenguaje.WriteLine("\t\t\tmatch(\"" + getContenido() + "\");");
                 match(Tipos.ST);
             }
-            else if(getClasificacion() == Tipos.SNT)
-            {
-                lenguaje.WriteLine("\t\t\t" + getContenido() + "();");
-                match(Tipos.SNT);
-            }
             else
             {
                 throw new Exception("Error de sintaxis");
             }
             
-            if (getClasificacion() != Tipos.FinProduccion)
+            if (getClasificacion() != Tipos.FinProduccion && getContenido() !=")")
             {
                 simbolos();
             }

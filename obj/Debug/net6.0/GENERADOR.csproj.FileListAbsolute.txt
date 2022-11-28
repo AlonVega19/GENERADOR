@@ -1,0 +1,15 @@
+C:\LYAII\U3\GENERADOR\bin\Debug\net6.0\GENERADOR.exe
+C:\LYAII\U3\GENERADOR\bin\Debug\net6.0\GENERADOR.deps.json
+C:\LYAII\U3\GENERADOR\bin\Debug\net6.0\GENERADOR.runtimeconfig.json
+C:\LYAII\U3\GENERADOR\bin\Debug\net6.0\GENERADOR.dll
+C:\LYAII\U3\GENERADOR\bin\Debug\net6.0\ref\GENERADOR.dll
+C:\LYAII\U3\GENERADOR\bin\Debug\net6.0\GENERADOR.pdb
+C:\LYAII\U3\GENERADOR\obj\Debug\net6.0\GENERADOR.csproj.AssemblyReference.cache
+C:\LYAII\U3\GENERADOR\obj\Debug\net6.0\GENERADOR.GeneratedMSBuildEditorConfig.editorconfig
+C:\LYAII\U3\GENERADOR\obj\Debug\net6.0\GENERADOR.AssemblyInfoInputs.cache
+C:\LYAII\U3\GENERADOR\obj\Debug\net6.0\GENERADOR.AssemblyInfo.cs
+C:\LYAII\U3\GENERADOR\obj\Debug\net6.0\GENERADOR.csproj.CoreCompileInputs.cache
+C:\LYAII\U3\GENERADOR\obj\Debug\net6.0\GENERADOR.dll
+C:\LYAII\U3\GENERADOR\obj\Debug\net6.0\ref\GENERADOR.dll
+C:\LYAII\U3\GENERADOR\obj\Debug\net6.0\GENERADOR.pdb
+C:\LYAII\U3\GENERADOR\obj\Debug\net6.0\GENERADOR.genruntimeconfig.cache
