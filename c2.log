@@ -1,3 +1,24 @@
 Archivo: c2.gram
-Fecha: 06/12/2022 06:33:00 a. m.
-Error: El archivo c2.gram no existe 
+Fecha: 06/12/2022 08:53:44 a. m.
+Gramatica ST
+: ST
+cplusplus ST
+
+ FinProduccion
+Programa ST
+-> Produce
+Librerias ST
+Variables ST
+Main ST
+
+ FinProduccion
+Main ST
+-> Produce
+TipoDato ST
+main ST
+( ST
+) ST
+BloqueInstrucciones ST
+
+ FinProduccion
+Error de sintaxis, se espera un ) en linea: 4

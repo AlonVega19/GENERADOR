@@ -9,139 +9,155 @@ using System.Collections.Generic;
 //Requerimiento 4: El constructor Lexico() parametrizado debe validar que la extension del archivo a compilar sea .gen y si no es .gen debe lanzar una excepcion 
 //Requerimiento 5: Resolver la ambigüedad de ST y SNT 
 //Requerimiento 6: Recorrer linea por linea el archivo .gram 
+//Requerimiento 7: Implementar el or y la cerradura epsilon
 namespace GENERADOR
 {
     public class Lenguaje : Sintaxis, IDisposable
     {
-        int contTab;
         string primeraProduccion;
-        bool produccionPublica;
+        bool primeraProduccionPublica;
+        List<string> listaSNT;
 
 
         public Lenguaje(string nombre) : base(nombre)
         {
-            contTab = 0;
             primeraProduccion = "";
-            produccionPublica = true;
+            primeraProduccionPublica = true;
+            listaSNT = new List<string>();
         }
         public Lenguaje()
         {
-            contTab = 0;
             primeraProduccion = "";
-            produccionPublica = true;
+            primeraProduccionPublica = true;
+            listaSNT = new List<string>();
         }
         public void Dispose()
         {
             cerrar();
         }
+
+        private bool esSNT(string contenido)
+        {
+            return listaSNT.Contains(contenido);
+        }
+        private void agregarSNT(string contenido)
+        {
+            //Requerimiento 6
+            listaSNT.Add(contenido);
+        }
+
+        public void gramatica()
+        {
+            int contadorDeTabular = 0;
+            cabecera();
+            primeraProduccion = getContenido();
+            Programa(primeraProduccion);
+            cabeceraLenguaje();
+            listaProducciones();
+            contadorDeTabular = 1;
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "}");
+            lenguaje.WriteLine("}");
+        }
+        private void cabecera()
+        {
+            match("Gramatica");
+            match(":");
+            match(Tipos.ST);
+            match(Tipos.FinProduccion);
+        }
         private void Programa(string produccionPrincipal)
         {
-            contTab = 0;
+            agregarSNT("Programa");
+            agregarSNT("Librerias");
+            agregarSNT("variables");
+            agregarSNT("Lista identificadores");
+            int contadorDeTabular = 0;
             programa.WriteLine("using System;");
             programa.WriteLine("using System.IO;");
             programa.WriteLine("using System.Collections.Generic;");
             programa.WriteLine();
             programa.WriteLine("namespace Generico");
             programa.WriteLine("{");
-            contTab++;
-            programa.WriteLine(tabula() + "public class Program");
-            programa.WriteLine(tabula() + "{");
-            contTab++;
-            programa.WriteLine(tabula() + "static void Main(string[] args)");
-            programa.WriteLine(tabula() + "{");
-            contTab++;
-            programa.WriteLine(tabula() + "try");
-            programa.WriteLine(tabula() + "{");
-            contTab++;
-            programa.WriteLine(tabula() + "using (Lenguaje a = new Lenguaje())");
-            programa.WriteLine(tabula() + "{");
-            contTab++;
-            programa.WriteLine(tabula() + "a." + produccionPrincipal + "();");
-            contTab--;
-            programa.WriteLine(tabula() + "}");
-            contTab--;
-            programa.WriteLine(tabula() + "}");
-            programa.WriteLine(tabula() + "catch (Exception e)");
-            programa.WriteLine(tabula() + "{");
-            contTab++;
-            programa.WriteLine(tabula() + "Console.WriteLine(e.Message);");
-            contTab--;
-            programa.WriteLine(tabula() + "}");
-            contTab--;
-            programa.WriteLine(tabula() + "}");
-            contTab--;
-            programa.WriteLine(tabula() + "}");
-            contTab--;
-            programa.WriteLine(tabula() + "}");
+            contadorDeTabular++;
+            programa.WriteLine(tabula(contadorDeTabular) + "public class Program");
+            programa.WriteLine(tabula(contadorDeTabular) + "{");
+            contadorDeTabular++;
+            programa.WriteLine(tabula(contadorDeTabular) + "static void Main(string[] args)");
+            programa.WriteLine(tabula(contadorDeTabular) + "{");
+            contadorDeTabular++;
+            programa.WriteLine(tabula(contadorDeTabular) + "try");
+            programa.WriteLine(tabula(contadorDeTabular) + "{");
+            contadorDeTabular++;
+            programa.WriteLine(tabula(contadorDeTabular) + "using (Lenguaje a = new Lenguaje())");
+            programa.WriteLine(tabula(contadorDeTabular) + "{");
+            contadorDeTabular++;
+            programa.WriteLine(tabula(contadorDeTabular) + "a." + produccionPrincipal + "();");
+            contadorDeTabular--;
+            programa.WriteLine(tabula(contadorDeTabular) + "}");
+            contadorDeTabular--;
+            programa.WriteLine(tabula(contadorDeTabular) + "}");
+            programa.WriteLine(tabula(contadorDeTabular) + "catch (Exception e)");
+            programa.WriteLine(tabula(contadorDeTabular) + "{");
+            contadorDeTabular++;
+            programa.WriteLine(tabula(contadorDeTabular) + "Console.WriteLine(e.Message);");
+            contadorDeTabular--;
+            programa.WriteLine(tabula(contadorDeTabular) + "}");
+            contadorDeTabular--;
+            programa.WriteLine(tabula(contadorDeTabular) + "}");
+            contadorDeTabular--;
+            programa.WriteLine(tabula(contadorDeTabular) + "}");
+            contadorDeTabular--;
+            programa.WriteLine(tabula(contadorDeTabular) + "}");
         }
-        public void gramatica()
-        {
-            contTab = 0;
-            cabecera();
-            primeraProduccion = getContenido();
-            Programa(primeraProduccion);
-            cabeceraLenguaje();
-            listaProducciones();
-            contTab = 1;
-            lenguaje.WriteLine(tabula() + "}");
-            lenguaje.WriteLine("}");
-        }
-
-        private void cabecera()
-        {
-            match("Gramatica");
-            match(":");
-            match(Tipos.SNT);
-            match(Tipos.FinProduccion);
-        }
+        
         private void cabeceraLenguaje()
         {
-            contTab = 0;
+            int contadorDeTabular = 0;
             lenguaje.WriteLine("using System;");
             lenguaje.WriteLine("using System.Collections.Generic;");
             lenguaje.WriteLine("namespace Generico");
             lenguaje.WriteLine("{");
-            contTab++;
-            lenguaje.WriteLine(tabula() + "public class Lenguaje : Sintaxis, IDisposable");
-            lenguaje.WriteLine(tabula() + "{");
-            contTab++;
-            lenguaje.WriteLine(tabula() + "public Lenguaje(string nombre) : base(nombre)");
-            lenguaje.WriteLine(tabula() + "{");
-            contTab++;
-            contTab--;
-            lenguaje.WriteLine(tabula() + "}");
-            lenguaje.WriteLine(tabula() + "public Lenguaje()");
-            lenguaje.WriteLine(tabula() + "{");
-            contTab++;
-            contTab--;
-            lenguaje.WriteLine(tabula() + "}");
-            lenguaje.WriteLine(tabula() + "public void Dispose()");
-            lenguaje.WriteLine(tabula() + "{");
-            contTab++;
-            lenguaje.WriteLine(tabula() + "cerrar();");
-            contTab--;
-            lenguaje.WriteLine(tabula() + "}");
+            contadorDeTabular++;
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "public class Lenguaje : Sintaxis, IDisposable");
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "{");
+            contadorDeTabular++;
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "public Lenguaje(string nombre) : base(nombre)");
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "{");
+            contadorDeTabular++;
+            contadorDeTabular--;
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "}");
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "public Lenguaje()");
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "{");
+            contadorDeTabular++;
+            contadorDeTabular--;
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "}");
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "public void Dispose()");
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "{");
+            contadorDeTabular++;
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "cerrar();");
+            contadorDeTabular--;
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "}");
         }
         private void listaProducciones()
         {
-            contTab = 2;
-            if(produccionPublica)
+            int contadorDeTabular = 2;
+            if(primeraProduccionPublica)
             {
-                lenguaje.WriteLine(tabula() + "public void " + getContenido() + "()");
-                produccionPublica = false;
+                lenguaje.WriteLine(tabula(contadorDeTabular) + "public void " + getContenido() + "()");
+                primeraProduccionPublica = false;
             }
             else
             {
-                lenguaje.WriteLine(tabula() + "private void " + getContenido() + "()");
+                lenguaje.WriteLine(tabula(contadorDeTabular) + "private void " + getContenido() + "()");
             }
-            lenguaje.WriteLine(tabula() + "{");
-            contTab++;
-            match(Tipos.SNT);
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "{");
+            contadorDeTabular++;
+            match(Tipos.ST);
             match(Tipos.Produce);
             simbolos();
             match(Tipos.FinProduccion);
-            contTab--;
-            lenguaje.WriteLine(tabula() + "}");
+            contadorDeTabular--;
+            lenguaje.WriteLine(tabula(contadorDeTabular) + "}");
             if (!FinArchivo())
             {
                 listaProducciones();
@@ -150,26 +166,34 @@ namespace GENERADOR
 
         private void simbolos()
         {
-            if(esTipo(getContenido()))
+            int contadorDeTabular = 3;
+            if(getContenido() == "(")
             {
-                lenguaje.WriteLine(tabula() + "match(Tipos." + getContenido() + ");");
-                match(Tipos.SNT);
+                match("(");
+                lenguaje.WriteLine(tabula(contadorDeTabular) + "if()");
+                lenguaje.WriteLine(tabula(contadorDeTabular) + "{");
+                contadorDeTabular++;
+                simbolos();
+                match(")");
+                contadorDeTabular--;
+                lenguaje.WriteLine(tabula(contadorDeTabular) + "}");
+            }
+            else if(esTipo(getContenido()))
+            {
+                lenguaje.WriteLine(tabula(contadorDeTabular) + "match(Tipos." + getContenido() + ");");
+                match(Tipos.ST);
+            }
+            else if(esSNT(getContenido()))
+            {
+                lenguaje.WriteLine(tabula(contadorDeTabular) + "match(\"" + getContenido() + "\");");
+                match(Tipos.ST);
             }
             else if(getClasificacion() == Tipos.ST)
             {
-                lenguaje.WriteLine(tabula() + "match(\"" + getContenido() + "\");");
+                lenguaje.WriteLine(tabula(contadorDeTabular) + "match(\"" + getContenido() + "\");");
                 match(Tipos.ST);
-            }
-            else if(getClasificacion() == Tipos.SNT)
-            {
-                lenguaje.WriteLine(tabula() + getContenido() + "();");
-                match(Tipos.SNT);
-            }
-            else
-            {
-                throw new Exception("Error de sintaxis");
-            }
-            if(getClasificacion() != Tipos.FinProduccion)
+            }        
+            if(getClasificacion() != Tipos.FinProduccion && getContenido() != ")")
             {
                 simbolos();
             }
@@ -202,10 +226,10 @@ namespace GENERADOR
             return false;
         }
 
-        private string tabula()
+        private string tabula(int contadorDeTabular)
         {
             string tab = "";
-            for(int i = 0; i < contTab; i++)
+            for(int i = 0; i < contadorDeTabular; i++)
             {
                 tab += "\t";
             }
